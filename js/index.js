@@ -1,11 +1,8 @@
 //ES5 in htmlcolletions
-NodeList.prototype.forEach = HTMLCollection.prototype.forEach = Array.prototype.forEach;
-NodeList.prototype.map = HTMLCollection.prototype.map = Array.prototype.map;
-NodeList.prototype.filter = HTMLCollection.prototype.filter = Array.prototype.filter;
-NodeList.prototype.reduce = HTMLCollection.prototype.reduce = Array.prototype.reduce;
-NodeList.prototype.reduceRight = HTMLCollection.prototype.reduceRight = Array.prototype.reduceRight;
-NodeList.prototype.every = HTMLCollection.prototype.every = Array.prototype.every;
-NodeList.prototype.some = HTMLCollection.prototype.some = Array.prototype.some;
+['forEach', 'map', 'filter', 'reduce', 'reduceRight', 'every', 'some'].forEach(
+    function (p) {
+        NodeList.prototype[p] = HTMLCollection.prototype[p] = Array.prototype[p];
+    });
 ///////////////////////////////////
 var audioBoxes;
 var videoBoxes;
@@ -30,4 +27,47 @@ var addEventListeners = function (element) {
 videoBoxes.forEach(addEventListeners);
 audioBoxes.forEach(addEventListeners);
 ////////////////
-Snap(50, 50)
+function Player(src, w, h) {
+    this.w=w;
+    this.h=h;
+    this.playerControl = Snap(w, h)
+    this.button = this.playerControl.circle(w / 2, h / 2, ((w + h) / 2) / 2).attr({
+        fill: "#000"
+    });
+    this.closer =
+        this.button.parent = this; //link for access from function
+    this.controlFunction = function (event) {
+        if (this.parent.player.paused) {
+            this.parent.player.play();
+            console.log("play");
+            var th = this; // limk for in timer
+            this.timer = setInterval(function () {
+                console.log(th.parent.player.currentTime, th.parent.player.duration, th.parent.w)
+th.parent.closer.attr({x:th.parent.player.currentTime/th.parent.player.duration*th.parent.w-th.parent.w})
+            }, 1000)
+        } else {
+            this.parent.player.pause();
+            console.log("pause")
+
+        }
+    }
+    this.button.click(this.controlFunction);
+    this.closer = this.playerControl.rect(-w, 0, w, h).attr({
+        fill: "#FFF",
+        
+    });
+    
+    this.closer.click(this.controlFunction);
+    this.closer.parent=this;
+    
+    this.player = new Audio(src);
+    this.player.paused = true;
+    var th = this; // llmk for in event
+    this.player.addEventListener("pause", function () {
+        clearInterval(th.button.timer);
+    });
+    this.maxDuration = this.player.duration;
+    
+    this.playerControl.append(this.player);
+}
+player = new Player("media/psycho.mp3", 50, 50);
