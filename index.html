@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
+    
+    <link rel="stylesheet" href="video-js/video-js.min.css">
+    <script src="video-js/video.js"></script>
+    
     <script src="js/jquery.min.js"></script>
     <script src="js/snap.svg-min.js"></script>
-    
-</head>
+    <script>
+  videojs.options.flash.swf = "/video-js/video-js.swf"
+</script>
+    <!--[if IE lt 9]> 
+<script src="http://remysharp.com/downloads/html5.js"></script> 
+<![endif]--> 
+ </head>
 <body>
-   <video src="media/power-of-american-natives.mp4" controls="true"></video>
+   <video  id="testVideo" class="video-js vjs-default-skin vjs-big-play-centered" data-setup="{}" controls="auto" width="800px" height="600px">
+       <source src="media/power-of-american-natives.mp4" type='video/mp4'/>
+   </video>
     <audio src="media/Joe%20Cocker%20-%20You%20are%20so%20beautiful.mp3" controls="true"></audio>
     <audio src="media/Marilyn%20Manson%20-%20Ka-boom%20Ka-boom.mp3" controls="true"></audio>
     <audio src="media/Marilyn%20Manson%20-%20Sweet%20Dream.mp3" controls="true"></audio>
